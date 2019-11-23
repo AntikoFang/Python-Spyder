@@ -23,6 +23,7 @@ class Content:
     def GetPage(self,url):
         req = requests.get(url)
         req.encoding = 'utf-8'
+        req.raise_for_status()
         return BeautifulSoup(req.text,'lxml')
     
     # 网页标题函数
@@ -53,6 +54,7 @@ class College:
     def GetPage(self,url):
         req = requests.get(url)
         req.encoding = 'utf-8'
+        req.raise_for_status()
         return BeautifulSoup(req.text,'lxml')
     
     # 获取某学院网页面板所有链接
@@ -67,12 +69,9 @@ class College:
         # 找到学院网页面板中所有链接
         Urls = bs.find(attr, {attr1: attr2}).find_all('a')  # 找到所有a标签
         for items in Urls:
-            urls.append(college_urls[a]+items.get("href"))
+            urls.append(college_urls[a]+items.get("href"))  # 获取href属性
         #print(items.get("href"))
         
-        #    for items in Urls:
-        #        urls.append(college_urls[j] + items.get("href"))
-            #urls.append('http://jrxy.hbue.edu.cn/'+items.get("href"))  # 找到href属性
         return urls
         #print(urls)
         
@@ -108,5 +107,9 @@ college.body(1,'div','id','wp_news_w10')
 print("就业信息")
 college.body(1,'div','id','wp_news_w11')
 
+# test
+url = 'http://www.hbue.edu.cn/'
+content = Content(url)
+content.Url(url,'li','class','menu-item i2')[1:]
 #college.All_Url(url, 'div', 'id', 'wp_news_w6')
 #college.body(college_url, 'div', 'id', 'wp_news_w6')
